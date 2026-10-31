@@ -1,5 +1,7 @@
 # AI381 Lab 2 — Container and CI
 
+[![AI381 Lab 2 CI](https://github.com/hqyyam-rgb/ai381-lab2/actions/workflows/ci.yml/badge.svg)](https://github.com/hqyyam-rgb/ai381-lab2/actions/workflows/ci.yml)
+
 Course: AI381 Machine Learning Operations  
 University: Jordan University of Science and Technology (JUST)  
 Semester: Fall 2026/27
