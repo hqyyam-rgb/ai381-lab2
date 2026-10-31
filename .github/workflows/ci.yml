@@ -7,7 +7,7 @@ on:
 
 permissions:
   contents: read
-
+  packages: write
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -41,10 +41,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build Docker image
-        run: docker build -t ai381-lab2:${{ github.sha }} .
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
 
-      - name: Install Trivy
+      
+- name: Install Trivy
         run: |
           sudo apt-get update
           sudo apt-get install -y wget apt-transport-https gnupg
@@ -52,6 +53,13 @@ jobs:
           echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb generic main" | sudo tee /etc/apt/sources.list.d/trivy.list
           sudo apt-get update
           sudo apt-get install -y trivy
-    
+
       - name: Scan image with Trivy
         run: trivy image --exit-code 1 --severity CRITICAL ai381-lab2:${{ github.sha }}
+
+      - name: Push image to GHCR
+        if: github.event_name == 'push'
+        run: |
+          IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}/ai381-lab2
+          docker tag ai381-lab2:${GITHUB_SHA} $IMAGE_NAME:${GITHUB_SHA}
+          docker push $IMAGE_NAME:${GITHUB_SHA}
