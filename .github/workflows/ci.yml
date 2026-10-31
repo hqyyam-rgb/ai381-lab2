@@ -45,7 +45,13 @@ jobs:
         run: docker build -t ai381-lab2:${{ github.sha }} .
 
       - name: Install Trivy
-        uses: aquasecurity/setup-trivy@v0.2.3
-
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget apt-transport-https gnupg
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo gpg --dearmor -o /usr/share/keyrings/trivy.gpg
+          echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb generic main" | sudo tee /etc/apt/sources.list.d/trivy.list
+          sudo apt-get update
+          sudo apt-get install -y trivy
+    
       - name: Scan image with Trivy
         run: trivy image --exit-code 1 --severity CRITICAL ai381-lab2:${{ github.sha }}
