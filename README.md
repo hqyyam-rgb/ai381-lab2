@@ -65,7 +65,7 @@ GitHub Container Registry (GHCR):
 
 Latest recorded image digest:
 
-"sha256:5da7a75ad2087ddf00abd9f5812df9bed01933ee6fc72c32ba773a12f0511f1a"
+sha256:22d6eb4af39108863cdb4ff92560f19e91d8d54eb1a86603c7dc5dc41680b9ec
 
 Continuous Integration
 
